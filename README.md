@@ -189,27 +189,3 @@ $
 
 
 
-Notes from OpenGovLab on Why data Commons
-
-So hard to process open data
-Waste in fragmentation of open data processing. Many are doing it but then don’t share in a way that can be leveraged.
-
-Concept of Data commons provides access to  high quality processed data in ways that is AI ready in a way to have new infrastructure and provide conversational way to open data. 
-
-### Class Diagram
-```mermaid
-classDiagram
-    class DataProduct["dprod:DataProduct"]
-    class SofwareApplication["schema:SoftwareApplication"]
-    class ContainerizedApplication["sal:ContainerizedApplication"]
-    class SALDataProduct["sal:SALDataProduct"]
-    class Action["schema:Action"]
-    class SALAction["sal:SALAction"]
-    class CLICommandAction["sal:CLICommandAction"]
-    SofwareApplication <-- ContainerizedApplication: rdfs#58;subClassOf
-    DataProduct <--  SALDataProduct : rdfs#58;subClassOf
-    Action <-- SALAction : rdfs#58;subClassOf
-    SALAction <-- CLICommandAction : rdfs#58;subClassOf
-    CLICommandAction <-- CLIOntologyCommandAction 
- ```       
-
