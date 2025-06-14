@@ -1,0 +1,100 @@
+{
+    "@context": {
+            "sal": "http://w3id.org/sal/sal#",
+            "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+            "owl": "http://www.w3.org/2002/07/owl#",
+            "schema": "https://schema.org/",
+            "dc": "http://purl.org/dc/elements/1.1/",
+            "sh": "http://www.w3.org/ns/shacl#",
+            "xsd": "http://www.w3.org/2001/XMLSchema#",
+            "skos": "http://www.w3.org/2004/02/skos/core#"
+
+    },
+    "@graph": [
+        {
+            "@id": "sal:",
+            "@type": "owl:Ontology",
+            "dc:title":  "The Semantic Accessibility Layer (SAL) Vocabulary",
+            "dc:description": "This is the SAL Vocabulary for use in describing semantic accessibility layer protocol within containerized applications",
+            "sal:baseCommand": "sal",
+            "sal:runCommand": "run",
+            "sal:ontologyCommand": [
+                "ontology",
+                "vocabulary",
+                "vocab"
+            ],
+            "sal:moduleProtocolScheme": "salmodule"
+
+        },
+        {
+            "@id": "sal:baseCommand",
+            "@type": "owl:OntologyProperty",
+            "rdfs:label": "base command",
+            "rdfs:comment": "The base command for all containerized applications that adhere to the SAL command line specification.",
+            "skos:example": "docker run SAL_IMAGE { sal: sal:baseCommand ?label } SUB_COMMAND"
+    
+        },
+        {
+            "@id": "sal:ontologyCommand",
+            "@type": "owl:OntologyProperty",
+            "rdfs:label": "ontology command",
+            "rdfs:comment": "Subcommand used to invoke printing of a SAL containerized application's ontology to standard output (stdout) in application/ld+json format.",
+            "skos:example": "docker run SAL_IMAGE { sal: sal:baseCommand ?label } { sal: sal:ontologyCommand ?label}"
+        },
+        {
+
+            "@id":"sal:runCommand",
+            "@type": "owl:OntologyProperty",
+            "rdfs:label": "ontology property",
+            "rdfs:comment": "Subcommand used to invoke sal:NodeProcessor instance.",
+            "rdfs:comment": "Sub command of sal:baseCommand.",
+            "skos:example":  "docker run SAL_IMAGE { sal: sal:baseCommand ?label } { sal: sal:runCommand ?label} NODE_PROCESSOR_INSTANCE_IRIl"
+
+        },
+        {
+         
+            "@id": "sal:moduleProtocolScheme",
+            "@type": "sal:OntologyProperty",
+            "rdfs:label": "protocol scheme",
+            "rdfs:comment": "Protocol scheme to use when (de)referencing SAL Modules as their ontology",
+            "skos:note": "Dereferencing an ontology with a SAL protocol scheme involves using the github based protocol over https to clone the repository, build the container image using the Dockerfile expected in the base repository directory and run the container using the sal:ontologyCommand subcommand",
+            "skos:example": "JSON-LD example: { \"@context\": { \"myrepo\": \"salmodule://GITHOST/USER/REPO/\" }"
+
+        },
+        {
+            "@id": "sal:NodeProcessor",
+            "@type": "owl:Class",
+            "rdfs:label": "node processor",
+            "rdfs:comment": "A unit of work that optionally processes input that matches sal:input and/or emits newline delimited JSON-LD object nodes, in json compact format, matching sh:output.",
+            "skos:note": "It is also possible a NodeProcessor instance may process input from external data sources if sal:input annotation property is not present.",
+            "skos:note": "It is also possible a NodeProcessor instance may send output to external data targets if sal:output annotation property is not present.",
+            "rdfs:subClassOf": {"@id":"owl:Class"}
+        },
+        { 
+            "@id": "sal:input",
+            "@type": "rdf:Property",
+            "rdfs:label": "input",
+            "rdfs:comment": "Object describes expected  (SHACL) shape of newline delimited JSON-LD object input to the subject",
+            "rdfs:range": {"@id": "sh:NodeShape"}
+           
+        },
+        { 
+            "@id": "sal:output",       
+            "@type": "rdf:Property",
+            "rdfs:label": "output",
+            "rdfs:comment": "Object describes expected  (SHACL) shape of newline delimited JSON-LD object output from the subject",
+            "rdfs:range": {"@id": "sh:NodeShape"}
+           
+        },
+        { 
+
+            "rdfs:label": "self",
+            "@type": "rdf:Property",
+            "rdfs:comment": "Object describes expected  (SHACL) shape of the subject",
+            "rdfs:range": {"@id": "sh:NodeShape"}
+          
+        }
+
+    ]
+}
