@@ -25,13 +25,13 @@ CSV --> FileServer
 Excel --> FileServer
 WebServicesAPI --> Harmonize1[("Harmonize")]
 FileServer --> Harmonize1
-ExternalDocs --Context--> User1["User 1"]
-ImplicitKnowledge1["Implicit Knowledge"] --Context--> User1
+ExternalDocs --context--> User1["User 1"]
+ImplicitKnowledge1["Implicit Knowledge"] --context--> User1
 Harmonize1 <--> User1
 WebServicesAPI --> Harmonize2[("Harmonize")]
 FileServer --> Harmonize2
-ExternalDocs -.-> User2["User 1"]
-ImplicitKnowledge -.-> User2["User 2"]
+ExternalDocs --context--> User2["User 1"]
+ImplicitKnowledge --context--> User2["User 2"]
 Harmonize2 <--> User2
 ```
 
