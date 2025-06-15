@@ -128,20 +128,20 @@ $ docker run MYIMAGE sal ontology
             "sh:property" : [
                 {
                     "sh:path": {"@id":"schema:givenName"},
-                    "sh:datatype": "xsd:string",
+                    "sh:datatype": {"@id":"xsd:string"},
                     "sh:minCount": 1,
                     "sh:maxCount": 1
                 },
                 {
                     "sh:path": {"@id","schema:familyName"},
-                    "sh:datatype": "xsd:string",
+                    "sh:datatype": {"@id","xsd:string"},
                     "sh:minCount": 1,
                     "sh:maxCount": 1
 
                 },
                 {
                     "sh:path": {"@id": "schema:birthDate"},
-                    "sh:datatype": "xsd:date",
+                    "sh:datatype": {"@id":"xsd:date"},
                     "sh:minCount": 1,
                     "sh:maxCount": 1
                    
@@ -158,7 +158,7 @@ $ docker run MYIMAGE sal ontology
             "@type": "owl:Class",
             "rdfs:subClassOf": {"@id": "sal:NodeProcessor"},
             "sal:input": {"@id":"PersonShape"},
-            "sal:output": {"@id":"PersonShape"}
+            "sal:output": {"@id":"PersonAndEducationShape"}
         }
         ]
 }
@@ -187,5 +187,50 @@ $ docker run MYIMAGE sal run -e SAL_NP_INSTANCE="${SAL_NP_INSTANCE}"
 $ 
 ```
 
+### SAL Module Protocol Scheme
+
+SAL Modules have a protocol scheme (`sal:moduleProtocolScheme`) to define how SAL Projects (de)reference SAL Module ontologies in their projects. The following diagram illustrates the process of dereferencing a SAL Module protocol scheme IRI referenced in a JSON-LD document to obtain it's ontology.
+
+```mermaid
+sequenceDiagram
+
+actor User
+participant JSONLDProcessor
+participant Docker
+participant Git
+participant RemoteGitRepository 
+participant LocalGitRepository
+
+User ->> JSONLDProcessor: Process JSON-LD Document
+activate JSONLDProcessor
+JSONLDProcessor ->> JSONLDProcessor: parse json-ld
+activate JSONLDProcessor
+JSONLDProcessor ->> JSONLDProcessor: dereference salmodule://[HOST/]USER/REPO#35;
+
+JSONLDProcessor ->> Git: git clone [HOST/]USER/repo
+activate Git
+Git ->> RemoteGitRepository: 
+RemoteGitRepository -->> Git: 
+Git ->> LocalGitRepository: 
+LocalGitRepository -->> Git: 
+Git -->> JSONLDProcessor: 
+deactivate Git 
+
+JSONLDProcessor ->> Docker: docker build 
+activate Docker
+Docker ->> LocalGitRepository: process Dockerfile in repo base directory
+LocalGitRepository -->> Docker: 
+Docker -->> JSONLDProcessor: <SAL Module Image>
+deactivate Docker
+
+JSONLDProcessor ->> Docker: run <SAL Module Image> sal ontology
+activate Docker
+Docker -->> JSONLDProcessor: ontology from stdout
+deactivate Docker
+JSONLDProcessor -->> User: 
+
+
+deactivate JSONLDProcessor
+```
 
 
